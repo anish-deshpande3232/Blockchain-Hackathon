@@ -152,6 +152,65 @@ app.get("/api/test", (req, res) => {
 
 const PORT = 4000;
 
+// Consumer verification endpoint
+app.get("/api/verify/:batchId", async (req, res) => {
+  try {
+    const { batchId } = req.params;
+
+    const batch = await BatchMeta.findOne({ batchId });
+
+    if (!batch) {
+      return res.status(404).json({
+        verified: false,
+        score: 0,
+        message: "Batch not found"
+      });
+    }
+
+    let score = 0;
+
+    // Exists
+    score += 40;
+
+    // Has events
+    if (batch.events.length > 0) {
+      score += 20;
+    }
+
+    // Logistics event
+    if (batch.events.some(e => e.role === "logistics")) {
+      score += 10;
+    }
+
+    // Lab event
+    if (batch.events.some(e => e.role === "lab")) {
+      score += 20;
+    }
+
+    // Required fields check
+    if (batch.productName && batch.producerName && batch.quantity) {
+      score += 10;
+    }
+
+    res.json({
+      verified: score >= 60,
+      score,
+      product: {
+        batchId: batch.batchId,
+        productName: batch.productName,
+        producerName: batch.producerName,
+        industryType: batch.industryType,
+        quantity: batch.quantity,
+        unit: batch.unit
+      },
+      timeline: batch.events
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
