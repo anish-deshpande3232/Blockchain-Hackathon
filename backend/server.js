@@ -50,8 +50,46 @@ const BatchMeta = mongoose.model("BatchMeta", batchMetaSchema);
 // Test Route
 // ─────────────────────────
 
+// Root route
 app.get("/", (req, res) => {
   res.json({ message: "Backend running successfully" });
+});
+
+// Create new batch
+app.post("/api/batch", async (req, res) => {
+  try {
+    console.log("POST /api/batch hit");
+
+    const newBatch = new BatchMeta(req.body);
+    await newBatch.save();
+
+    res.json({
+      success: true,
+      message: "Batch saved successfully",
+      data: newBatch
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all batches
+app.get("/api/batches", async (req, res) => {
+  try {
+    const batches = await BatchMeta.find();
+    res.json({
+      success: true,
+      count: batches.length,
+      data: batches
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Test route
+app.get("/api/test", (req, res) => {
+  res.send("POST route exists");
 });
 
 const PORT = 4000;
