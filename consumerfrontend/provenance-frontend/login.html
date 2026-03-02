@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Consumer Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>Consumer Login</h2>
+
+    <input type="text" id="username" placeholder="Enter Username">
+    <input type="password" id="password" placeholder="Enter Password">
+
+    <button onclick="loginUser()">Login</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+<script>
+function loginUser() {
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const error = document.getElementById("loginError");
+
+  // Basic validation
+  if (username === "" || password === "") {
+    error.innerText = "Please enter both username and password";
+    return;
+  }
+
+  // Store login info
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("consumerName", username);
+
+  // Redirect to scanner
+  window.location.href = "verify.html";
+}
+</script>
+
+</body>
+</html>

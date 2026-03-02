@@ -1,33 +1,7 @@
-function onScanSuccess(decodedText) {
-
-  html5QrcodeScanner.clear();
-
-  console.log("Scanned:", decodedText);
-
-  try {
-    const parsedData = JSON.parse(decodedText);
-
-    // Check if batchId exists
-    if (!parsedData.batchId) {
-      throw new Error("Invalid QR Structure");
-    }
-
-    const batchId = parsedData.batchId;
-
-    // Display batchId
-    document.getElementById("productName").innerText = batchId;
-    document.getElementById("resultCard").style.display = "block";
-
-  } catch (error) {
-
-    // If JSON parsing fails OR batchId missing
-    document.getElementById("productName").innerText = "❌ Invalid QR Code";
-    document.getElementById("resultCard").style.display = "block";
-
-    console.log("Invalid QR:", error);
-  }
+// 🔐 Protect page
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "login.html";
 }
-
 
 // Initialize scanner
 const html5QrcodeScanner = new Html5QrcodeScanner(
@@ -37,3 +11,50 @@ const html5QrcodeScanner = new Html5QrcodeScanner(
 );
 
 html5QrcodeScanner.render(onScanSuccess);
+
+
+// 🎯 SIMPLE WORKING VERSION
+function onScanSuccess(decodedText) {
+
+  html5QrcodeScanner.clear();
+
+  const card = document.getElementById("resultCard");
+  const validContent = document.getElementById("validContent");
+  const invalidContent = document.getElementById("invalidContent");
+  const restartBtn = document.getElementById("restartBtn");
+
+  try {
+    const parsedData = JSON.parse(decodedText);
+
+    if (!parsedData.batchId) {
+      throw new Error("Invalid QR");
+    }
+
+    // VALID QR
+    document.getElementById("productName").innerText = parsedData.batchId;
+
+    validContent.style.display = "block";
+    invalidContent.style.display = "none";
+
+  } catch (error) {
+
+    // INVALID QR
+    validContent.style.display = "none";
+    invalidContent.style.display = "block";
+  }
+
+  card.style.display = "block";
+  restartBtn.style.display = "block";
+}
+
+
+// 🔄 Restart
+document.getElementById("restartBtn").addEventListener("click", function () {
+
+  document.getElementById("resultCard").style.display = "none";
+  document.getElementById("validContent").style.display = "none";
+  document.getElementById("invalidContent").style.display = "none";
+  this.style.display = "none";
+
+  html5QrcodeScanner.render(onScanSuccess);
+});

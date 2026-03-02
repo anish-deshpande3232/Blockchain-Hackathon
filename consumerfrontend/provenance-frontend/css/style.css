@@ -617,4 +617,96 @@ padding: 100px 5%;
   font-weight: bold;
   background: #00d084;
   color: white;
+}/* Invalid QR Styling */
+.invalid {
+  background: #ff4d4d !important;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}/* Restart Button */
+.restart-btn {
+  display: none;
+  margin-top: 25px;
+  padding: 12px 28px;
+  border-radius: 40px;
+  border: none;
+  background: linear-gradient(135deg, #00d084, #00b36b);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 208, 132, 0.5);
+}
+
+.restart-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 35px rgba(0, 208, 132, 0.8);
+}
+
+
+/* Invalid Result Look */
+.result-card.invalid {
+  background: rgba(255, 77, 77, 0.15);
+  border: 1px solid #ff4d4d;
+}
+
+
+/* Smooth Animation */
+.result-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.result-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}.invalid-text {
+  color: #ff4d6d;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  animation: shake 0.5s ease;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}.login-card {
+  width: 350px;
+  margin: 100px auto;
+  padding: 30px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.login-card input {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+}
+
+.login-card button {
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  background: #00d084;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }

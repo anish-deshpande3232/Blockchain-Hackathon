@@ -81,44 +81,39 @@
 </head>
 
 <body>
+  <p id="welcomeUser"></p>
 
 <h1>Scan Product QR</h1>
 
 <div id="qr-reader"></div>
 
 <!-- RESULT CARD -->
- <div class="result-card" id="resultCard" style="display:none;">
+ <div id="resultCard" class="result-card" style="display:none;">
 
-  <h2 id="productName"></h2>
+  <!-- VALID CONTENT -->
+  <div id="validContent" style="display:none;">
+    <h2 id="productName"></h2>
 
-  <div class="info-row">
-    <span class="label">Producer</span>
-    <span id="producer"></span>
+    <p><strong>Producer:</strong> <span id="producer"></span></p>
+    <p><strong>Quantity:</strong> <span id="quantity"></span></p>
+    <p><strong>Manufactured On:</strong> <span id="mfgDate"></span></p>
+    <p><strong>Expiry Date:</strong> <span id="expiryDate"></span></p>
+    <p><strong>Blockchain Hash:</strong> <span id="hash"></span></p>
+
+    <div class="verified-badge">
+      ✔ Verified on Blockchain
+    </div>
   </div>
 
-  <div class="info-row">
-    <span class="label">Quantity</span>
-    <span id="quantity"></span>
+  <!-- INVALID CONTENT -->
+  <div id="invalidContent" style="display:none;">
+    <h2 class="invalid-text">❌ Invalid QR Code</h2>
   </div>
 
-  <div class="info-row">
-    <span class="label">Manufactured On</span>
-    <span id="mfgDate"></span>
-  </div>
-
-  <div class="info-row">
-    <span class="label">Expiry Date</span>
-    <span id="expiryDate"></span>
-  </div>
-
-  <div class="info-row">
-    <span class="label">Blockchain Hash</span>
-    <span id="hash"></span>
-  </div>
-
-  <div id="statusBadge" class="status-badge">
-    Verified on Blockchain
-  </div>
+  <!-- RESTART BUTTON -->
+  <button id="restartBtn" class="restart-btn" style="display:none;">
+    🔄 Scan Again
+  </button>
 
 </div>
 
