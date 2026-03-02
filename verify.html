@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify Batch</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+  <script src="js/verify.js" defer></script>
+</head>
+<body>
+
+<h1>Batch Verification</h1>
+
+<input id="batchInput" placeholder="Enter Batch ID">
+<button onclick="verifyBatch()">Verify</button>
+
+<div class="card" id="resultCard" style="display:none;">
+
+  <h2 id="productName"></h2>
+  <p><strong>Producer:</strong> <span id="producer"></span></p>
+  <p><strong>Quantity:</strong> <span id="quantity"></span></p>
+
+  <div class="score-circle" id="score"></div>
+
+  <img id="photo" width="200">
+
+  <h3>Supply Chain Timeline</h3>
+  <div id="timeline"></div>
+
+  <h3>QR Code</h3>
+  <div id="qrcode"></div>
+
+  <button onclick="downloadPDF()">Download PDF</button>
+
+</div>
+
+<!-- QR library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- PDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
