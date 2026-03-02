@@ -203,7 +203,12 @@ app.get("/api/verify/:batchId", async (req, res) => {
         quantity: batch.quantity,
         unit: batch.unit
       },
-      timeline: batch.events
+      timeline: batch.events.map(e => ({
+  role: e.role,
+  actor: e.actor,
+  action: e.action,
+  timestamp: e.timestamp
+}))
     });
 
   } catch (err) {
