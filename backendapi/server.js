@@ -57,6 +57,7 @@ app.get("/", (req, res) => {
 
 // Create new batch
 app.post("/api/batch", async (req, res) => {
+  console.log("Incoming body:", req.body);
   try {
     console.log("POST /api/batch hit");
 
@@ -110,6 +111,7 @@ app.get("/api/batch/:batchId", async (req, res) => {
 
 // Append event to batch
 app.post("/api/batch/:batchId/event", async (req, res) => {
+
   try {
     const { batchId } = req.params;
 
