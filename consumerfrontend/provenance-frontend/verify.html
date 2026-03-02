@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Batch Verification</title>
+
+  <!-- QR Library -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    #qr-reader {
+      width: 320px;
+      margin: 0 auto 30px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .result-card {
+      display: none;
+      max-width: 450px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      text-align: left;
+    }
+
+    .result-card h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .result-card p {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    .verified-badge {
+      margin-top: 20px;
+      background: #00d084;
+      padding: 10px 20px;
+      border-radius: 30px;
+      display: inline-block;
+      font-weight: bold;
+      color: white;
+    }
+
+    .trust-circle {
+      margin: 20px auto 0 auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #00d084;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Scan Product QR</h1>
+
+<div id="qr-reader"></div>
+
+<!-- RESULT CARD -->
+ <div class="result-card" id="resultCard" style="display:none;">
+
+  <h2 id="productName"></h2>
+
+  <div class="info-row">
+    <span class="label">Producer</span>
+    <span id="producer"></span>
+  </div>
+
+  <div class="info-row">
+    <span class="label">Quantity</span>
+    <span id="quantity"></span>
+  </div>
+
+  <div class="info-row">
+    <span class="label">Manufactured On</span>
+    <span id="mfgDate"></span>
+  </div>
+
+  <div class="info-row">
+    <span class="label">Expiry Date</span>
+    <span id="expiryDate"></span>
+  </div>
+
+  <div class="info-row">
+    <span class="label">Blockchain Hash</span>
+    <span id="hash"></span>
+  </div>
+
+  <div id="statusBadge" class="status-badge">
+    Verified on Blockchain
+  </div>
+
+</div>
+
+<script src="js/verify.js"></script>
+
+</body>
+</html>
