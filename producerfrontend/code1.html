@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provenance Platform</title>
+
+  <!-- QR Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 420px;
+      max-width: 95vw;
+    }
+
+    h2 { text-align: center; margin-bottom: 20px; }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover { background: #1e4fd8; }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 14px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .hidden { display: none; }
+
+    .back-btn { background: #6b7280; }
+    .back-btn:hover { background: #4b5563; }
+
+    .success { color: green; text-align: center; margin-top: 10px; }
+
+    #qrBox { display:flex; justify-content:center; margin-top:10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ROLE SELECT -->
+  <div id="roleScreen">
+    <h2>Select Role</h2>
+    <button class="btn" onclick="goProducer()">Producer</button>
+    <button class="btn" onclick="goConsumer()">Consumer</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="hidden">
+    <h2>Farmer Login</h2>
+    <input type="text" id="farmerName" placeholder="Farmer Name" />
+    <input type="password" id="farmerPass" placeholder="Password" />
+    <button class="btn" onclick="loginFarmer()">Login</button>
+    <button class="btn back-btn" onclick="goHome()">Back</button>
+  </div>
+
+  <!-- CATEGORY -->
+  <div id="categoryScreen" class="hidden">
+    <h2>Select Category</h2>
+    <button class="btn" onclick="showAgriForm()">Agriculture</button>
+    <button class="btn" onclick="showPharmaForm()">Pharmaceutical</button>
+    <button class="btn back-btn" onclick="goHome()">Back</button>
+  </div>
+
+  <!-- AGRICULTURE FORM -->
+  <div id="agriForm" class="hidden">
+    <h2>Agriculture Details</h2>
+    <input type="text" placeholder="Crop Name" id="cropName" />
+    <input type="date" id="harvestDate" />
+    <input type="text" placeholder="Location" id="agriLocation" />
+    <input type="number" placeholder="Quantity" id="quantity" />
+    <button class="btn" onclick="submitAgri()">Submit</button>
+    <button class="btn back-btn" onclick="goCategory()">Back</button>
+    <div id="agriMsg" class="success"></div>
+    <div id="qrBox"></div>
+  </div>
+
+  <!-- PHARMA FORM -->
+  <div id="pharmaForm" class="hidden">
+    <h2>Pharmaceutical Details</h2>
+    <input type="text" placeholder="Drug / Herb Name" id="drugName" />
+    <input type="text" placeholder="Batch Number" id="batchNo" />
+    <input type="date" id="mfgDate" />
+    <input type="date" id="expDate" />
+    <input type="text" placeholder="Manufacturing Location" id="pharmaLocation" />
+    <input type="number" placeholder="Quantity" id="pharmaQuantity" />
+    <button class="btn" onclick="submitPharma()">Submit</button>
+    <button class="btn back-btn" onclick="goCategory()">Back</button>
+    <div id="pharmaMsg" class="success"></div>
+    <div id="qrBox"></div>
+  </div>
+
+</div>
+
+<script>
+  // 🔴 CHANGE LATER IF NEEDED
+  const CONSUMER_REDIRECT = "https://example.com";
+  const BACKEND_URL = "http://172.16.44.115:4000/api/batch"; // matches your backend
+
+  let loggedProducerName = "";
+
+  function hideAll() {
+    document.querySelectorAll('.container > div').forEach(d => d.classList.add('hidden'));
+  }
+
+  function generateBatchId(prefix) {
+    return prefix + '-' + Date.now() + '-' + Math.floor(Math.random()*100000);
+  }
+
+  async function sendToBackend(payload) {
+    try {
+      const res = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      console.log('Backend response:', data);
+    } catch (err) {
+      console.error('Backend error:', err);
+      alert('Backend connection failed');
+    }
+  }
+
+  function generateQR(batchId) {
+    const qrBox = document.getElementById('qrBox');
+    qrBox.innerHTML = '';
+
+    new QRCode(qrBox, {
+      text: JSON.stringify({ batchId }),
+      width: 160,
+      height: 160
+    });
+  }
+
+  function goHome() {
+    hideAll();
+    document.getElementById('roleScreen').classList.remove('hidden');
+  }
+
+  function goProducer() {
+    hideAll();
+    document.getElementById('loginScreen').classList.remove('hidden');
+  }
+
+  function goConsumer() {
+    window.location.href = CONSUMER_REDIRECT;
+  }
+
+  function loginFarmer() {
+    const name = document.getElementById('farmerName').value;
+    const pass = document.getElementById('farmerPass').value;
+
+    if (!name || !pass) {
+      alert('Please enter login details');
+      return;
+    }
+
+    loggedProducerName = name; // IMPORTANT for backend
+
+    hideAll();
+    document.getElementById('categoryScreen').classList.remove('hidden');
+  }
+
+  function goCategory() {
+    hideAll();
+    document.getElementById('categoryScreen').classList.remove('hidden');
+  }
+
+  function showAgriForm() {
+    hideAll();
+    document.getElementById('agriForm').classList.remove('hidden');
+  }
+
+  function showPharmaForm() {
+    hideAll();
+    document.getElementById('pharmaForm').classList.remove('hidden');
+  }
+
+  async function submitAgri() {
+    const batchId = generateBatchId('AGRI');
+
+    const payload = {
+      batchId,
+      industryType: 'agriculture',
+      producerName: loggedProducerName,
+      origin: document.getElementById('agriLocation').value,
+      productName: document.getElementById('cropName').value,
+      quantity: Number(document.getElementById('quantity').value),
+      unit: 'kg',
+      events: []
+    };
+
+    await sendToBackend(payload);
+    generateQR(batchId);
+
+    document.getElementById('agriMsg').innerText = 'Submitted. BatchID: ' + batchId;
+    console.log('Agriculture Payload:', payload);
+  }
+
+  async function submitPharma() {
+    const batchId = generateBatchId('PHARMA');
+
+    const payload = {
+      batchId,
+      industryType: 'pharmaceutical',
+      producerName: loggedProducerName,
+      origin: document.getElementById('pharmaLocation').value,
+      productName: document.getElementById('drugName').value,
+      quantity: Number(document.getElementById('pharmaQuantity').value),
+      unit: 'units',
+      events: []
+    };
+
+    await sendToBackend(payload);
+    generateQR(batchId);
+
+    document.getElementById('pharmaMsg').innerText = 'Submitted. BatchID: ' + batchId;
+    console.log('Pharma Payload:', payload);
+  }
+</script>
+
+</body>
+</html>
