@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/api.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>All Batches</h2>
+    <button onclick="loadBatches()" class="btn">Load</button>
+    <div id="batches"></div>
+  </div>
+
+<script>
+async function loadBatches(){
+  const res = await fetch('http://172.16.44.115:4000/api/batches');
+  const data = await res.json();
+  document.getElementById('batches').innerText = JSON.stringify(data,null,2);
+}
+</script>
+</body>
+</html>

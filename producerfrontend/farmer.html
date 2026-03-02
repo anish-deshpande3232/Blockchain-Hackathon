@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Farmer Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/api.js"></script>
+  <script defer src="js/blockchain.js"></script>
+  <script defer src="js/farmer.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Batch</h2>
+    <input id="productName" placeholder="Product Name">
+    <input id="origin" placeholder="Origin">
+    <input id="quantity" type="number" placeholder="Quantity">
+    <button onclick="createBatch()" class="btn">Submit</button>
+    <div id="result"></div>
+  </div>
+</body>
+</html>
