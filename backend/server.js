@@ -87,6 +87,64 @@ app.get("/api/batches", async (req, res) => {
   }
 });
 
+// Get single batch by batchId
+app.get("/api/batch/:batchId", async (req, res) => {
+  try {
+    const { batchId } = req.params;
+
+    const batch = await BatchMeta.findOne({ batchId });
+
+    if (!batch) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
+
+    res.json({
+      success: true,
+      data: batch
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Append event to batch
+app.post("/api/batch/:batchId/event", async (req, res) => {
+  try {
+    const { batchId } = req.params;
+
+    const batch = await BatchMeta.findOne({ batchId });
+
+    if (!batch) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
+
+    const newEvent = {
+      role: req.body.role,
+      actor: req.body.actor,
+      action: req.body.action,
+      metadataHash: req.body.metadataHash || "",
+      photoHashes: req.body.photoHashes || [],
+      notes: req.body.notes || "",
+      timestamp: new Date()
+    };
+
+    batch.events.push(newEvent);
+    batch.lastUpdated = new Date();
+
+    await batch.save();
+
+    res.json({
+      success: true,
+      message: "Event added successfully",
+      data: batch
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Test route
 app.get("/api/test", (req, res) => {
   res.send("POST route exists");
